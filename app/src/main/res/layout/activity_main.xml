@@ -6,17 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/input_source"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/input_source_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/input_text"
-        android:inputType="text"
-        android:textSize="36sp"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/source_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/indonesia"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:paddingVertical="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_source_layout" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/source_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/source_language"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_volume_up_24"
+            app:layout_constraintBottom_toBottomOf="@+id/source_language"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/transparent"
+            app:layout_constraintTop_toTopOf="@+id/source_language"
+            tools:ignore="ContentDescription" />
+
+        <EditText
+            android:id="@+id/input_source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_text"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:paddingHorizontal="0dp"
+            android:layout_marginTop="8dp"
+            android:textSize="32sp"
+            android:textCursorDrawable="@null"
+            android:singleLine="false"
+            android:maxLines="64"
+            android:backgroundTint="@color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/source_divider" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/target_source"
@@ -27,6 +71,6 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_source" />
+        app:layout_constraintTop_toBottomOf="@+id/input_source_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

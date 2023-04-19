@@ -2,4 +2,6 @@
     <string name="app_name">MachineTranslation</string>
     <string name="input_text">Masukkan Teks</string>
     <string name="output">Output</string>
+    <string name="indonesia">Indonesia</string>
+    <string name="batak_toba">Batak Toba</string>
 </resources>

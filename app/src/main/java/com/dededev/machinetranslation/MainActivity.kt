@@ -15,8 +15,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val text = binding.inputSource
-        val translation = binding.targetSource
+        val inputText = binding.inputSource
+        val outputText = binding.outputTarget
+        val translation = binding.outputTargetLayout
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
                 if (p0 != null) {
                     if (p0.isNotEmpty()) {
                         translation.visibility = View.VISIBLE
+                        outputText.text = inputText.text.toString()
                     } else {
                         translation.visibility = View.GONE
                     }
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        text.addTextChangedListener(textWatcher)
+        inputText.addTextChangedListener(textWatcher)
 
     }
 }

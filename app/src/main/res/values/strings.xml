@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MachineTranslation</string>
+    <string name="input_text">Masukkan Teks</string>
+    <string name="output">Output</string>
 </resources>

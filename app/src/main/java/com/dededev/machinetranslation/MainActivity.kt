@@ -1,5 +1,6 @@
 package com.dededev.machinetranslation
 
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         val inputText = binding.inputSource
         val translation = binding.outputTargetLayout
+        val btnSubmit = binding.btnSubmit
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -36,12 +38,13 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 //                "Not yet implemented"
-                translate(inputText.text.toString())
                 if (p0 != null) {
                     if (p0.isNotEmpty()) {
                         translation.visibility = View.VISIBLE
+                        btnSubmit.visibility = View.VISIBLE
                     } else {
                         translation.visibility = View.GONE
+                        btnSubmit.visibility = View.GONE
                     }
                 }
             }
@@ -53,15 +56,9 @@ class MainActivity : AppCompatActivity() {
 
         inputText.addTextChangedListener(textWatcher)
 
-//        inputText.setOnEditorActionListener {_, actionId, _ ->
-//            if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                // Panggil aktivitas lain atau lakukan tindakan lain di sini
-//                translate(inputText.text.toString())
-//                true
-//            } else {
-//                false
-//            }
-//        }
+        btnSubmit.setOnClickListener {
+            translate(inputText.text.toString())
+        }
 
     }
 

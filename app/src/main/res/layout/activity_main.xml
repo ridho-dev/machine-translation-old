@@ -10,6 +10,8 @@
         android:id="@+id/input_source_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/rounded_corner"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,10 +21,10 @@
             android:id="@+id/source_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
             android:text="@string/indonesia"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:paddingVertical="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_source_layout" />
 
@@ -37,8 +39,8 @@
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
             android:layout_marginEnd="16dp"
+            android:background="@color/transparent"
             android:src="@drawable/ic_baseline_check_24"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/source_language"
@@ -50,9 +52,10 @@
             android:id="@+id/btn_source_paste"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
             android:layout_marginEnd="16dp"
+            android:background="@color/transparent"
             android:src="@drawable/ic_baseline_content_paste_24"
+            app:tint="@color/main_purple"
             app:layout_constraintBottom_toBottomOf="@+id/source_language"
             app:layout_constraintEnd_toStartOf="@+id/btn_source_voice"
             app:layout_constraintTop_toTopOf="@+id/source_language"
@@ -64,6 +67,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:src="@drawable/ic_baseline_volume_up_24"
+            app:tint="@color/main_purple"
             app:layout_constraintBottom_toBottomOf="@+id/source_language"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/source_language"
@@ -73,27 +77,39 @@
             android:id="@+id/input_source"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/transparent"
             android:hint="@string/input_text"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
-            android:paddingHorizontal="0dp"
-            android:layout_marginTop="8dp"
-            android:textSize="32sp"
-            android:textCursorDrawable="@null"
-            android:singleLine="false"
             android:maxLines="64"
-            android:backgroundTint="@color/transparent"
+            android:paddingHorizontal="0dp"
+            android:singleLine="false"
+            android:textCursorDrawable="@null"
+            android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/source_divider" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:dividerColor="@color/transparent"
+            app:layout_constraintTop_toBottomOf="@+id/input_source"
+            tools:layout_editor_absoluteX="16dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/output_target_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/bg_purple"
         android:padding="16dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_source_layout">
@@ -102,10 +118,10 @@
             android:id="@+id/target_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
             android:text="@string/batak_toba"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:paddingVertical="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/output_target_layout" />
 
@@ -113,16 +129,20 @@
             android:id="@+id/target_divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/target_language"
-            tools:layout_editor_absoluteX="16dp" />
+            android:layout_marginTop="16dp"
+            app:dividerColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/target_language" />
 
         <ImageButton
             android:id="@+id/btn_target_copy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
             android:layout_marginEnd="16dp"
+            android:background="@color/transparent"
             android:src="@drawable/ic_baseline_content_copy_24"
+            app:tint="@color/main_purple"
             app:layout_constraintBottom_toBottomOf="@+id/target_language"
             app:layout_constraintEnd_toStartOf="@+id/btn_target_voice"
             app:layout_constraintTop_toTopOf="@+id/target_language"
@@ -133,11 +153,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
-            app:tint="@color/disabled_button_color"
             android:src="@drawable/ic_baseline_volume_up_24"
             app:layout_constraintBottom_toBottomOf="@+id/target_language"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/target_language"
+            app:tint="@color/disabled_button_color"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -148,9 +168,34 @@
             android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/target_divider"/>
+            app:layout_constraintTop_toBottomOf="@+id/target_divider" />
 
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:dividerColor="@color/transparent"
+            app:layout_constraintTop_toBottomOf="@+id/output_target"
+            tools:layout_editor_absoluteX="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="154dp"
+        android:src="@drawable/ic_baseline_compare_arrows_24"
+        android:background="@drawable/circle_background"
+        android:backgroundTint="@color/white"
+        android:padding="16dp"
+        android:elevation="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@+id/output_target_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_source_layout" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

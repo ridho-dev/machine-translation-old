@@ -1,13 +1,11 @@
 package com.dededev.machinetranslation
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import com.dededev.machinetranslation.data.ApiConfig
 import com.dededev.machinetranslation.data.TranslateResponse
 import com.dededev.machinetranslation.databinding.ActivityMainBinding
@@ -28,8 +26,12 @@ class MainActivity : AppCompatActivity() {
         translatedText = 0
 
         val inputText = binding.inputSource
+        val outputText = binding.outputTarget
         val translation = binding.outputTargetLayout
         val btnSubmit = binding.btnSubmit
+        val btnChange = binding.changeBtn
+
+        outputText.isEnabled = false
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -40,11 +42,12 @@ class MainActivity : AppCompatActivity() {
 //                "Not yet implemented"
                 if (p0 != null) {
                     if (p0.isNotEmpty()) {
-                        translation.visibility = View.VISIBLE
                         btnSubmit.visibility = View.VISIBLE
                     } else {
                         translation.visibility = View.GONE
                         btnSubmit.visibility = View.GONE
+                        outputText.setText("")
+                        btnChange.visibility = View.GONE
                     }
                 }
             }
@@ -57,7 +60,28 @@ class MainActivity : AppCompatActivity() {
         inputText.addTextChangedListener(textWatcher)
 
         btnSubmit.setOnClickListener {
+            translation.visibility = View.VISIBLE
+            btnChange.visibility = View.VISIBLE
             translate(inputText.text.toString())
+        }
+
+        btnChange.setOnClickListener {
+            val temp: String = inputText.text.toString()
+            inputText.text = outputText.text
+            outputText.setText(temp)
+
+            val sourceLanguage = binding.sourceLanguage
+            if (sourceLanguage.text == getString(R.string.indonesia)) {
+                binding.apply {
+                    sourceLanguage.text = getString(R.string.batak_toba)
+                    targetLanguage.text = getString(R.string.indonesia)
+                }
+            } else {
+                binding.apply {
+                    sourceLanguage.text = getString(R.string.indonesia)
+                    targetLanguage.text = getString(R.string.batak_toba)
+                }
+            }
         }
 
     }
@@ -74,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
-                        outputText.text = responseBody.activity
+                        outputText.setText(responseBody.activity)
                     }
                 } else {
                     Log.e("onResponse", "onFailure: ${response.message()}")

@@ -12,8 +12,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.dededev.machinetranslation.data.ApiConfig
 import com.dededev.machinetranslation.data.TranslateResponse
@@ -27,7 +31,19 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var textToSpeech: TextToSpeech
-    private var translatedText: Int = 0
+
+    private lateinit var btnSubmit : ImageButton
+    private lateinit var btnChange : ImageButton
+    private lateinit var btnSourceVoice : ImageButton
+    private lateinit var btnTargetVoice : ImageButton
+    private lateinit var micFab : ImageButton
+
+    private lateinit var translation : ConstraintLayout
+    private lateinit var inputText : EditText
+    private lateinit var outputText : EditText
+    private lateinit var sourceLanguage : TextView
+    private lateinit var targetLanguage : TextView
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,20 +51,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        translatedText = 0
-
-        val inputText = binding.inputSource
-        val outputText = binding.outputTarget
-        val translation = binding.outputTargetLayout
-        val btnSubmit = binding.btnSubmit
-        val btnChange = binding.changeBtn
-        val sourceLanguage = binding.sourceLanguage
-        val targetLanguage = binding.targetLanguage
-        val btnTargetVoice = binding.btnTargetVoice
-        val micFab = binding.micFab
+        inputText = binding.inputSource
+        outputText = binding.outputTarget
+        translation = binding.outputTargetLayout
+        btnSubmit = binding.btnSubmit
+        btnChange = binding.changeBtn
+        sourceLanguage = binding.sourceLanguage
+        targetLanguage = binding.targetLanguage
+        btnSourceVoice = binding.btnSourceVoice
+        btnTargetVoice = binding.btnTargetVoice
+        micFab = binding.micFab
 
         outputText.isEnabled = false
-
         btnTargetVoice.isEnabled = targetLanguage.text != getString(R.string.batak_toba)
 
         val textWatcher = object : TextWatcher {
@@ -77,91 +91,93 @@ class MainActivity : AppCompatActivity() {
 
         inputText.addTextChangedListener(textWatcher)
 
-        btnSubmit.setOnClickListener {
-            translation.visibility = View.VISIBLE
-            btnChange.visibility = View.VISIBLE
-            translate(inputText.text.toString())
-        }
-
-        btnChange.setOnClickListener {
-            val temp: String = inputText.text.toString()
-            inputText.text = outputText.text
-            outputText.setText(temp)
-
-            if (sourceLanguage.text == getString(R.string.indonesia)) {
-                binding.apply {
-                    sourceLanguage.text = getString(R.string.batak_toba)
-                    targetLanguage.text = getString(R.string.indonesia)
-
-                    btnSourceVoice.isEnabled = false
-                    btnTargetVoice.isEnabled = true
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        btnSourceVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.disabled_button_color))
-                        btnTargetVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.main_purple))
-                        micFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.disabled_button_color))
-                    }
-                }
-            } else {
-                binding.apply {
-                    sourceLanguage.text = getString(R.string.indonesia)
-                    targetLanguage.text = getString(R.string.batak_toba)
-
-                    btnSourceVoice.isEnabled = true
-                    btnTargetVoice.isEnabled = false
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        btnSourceVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.main_purple))
-                        btnTargetVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.disabled_button_color))
-                        micFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.main_purple))
-
-                    }
-                }
-            }
-        }
-
-        binding.micFab.setOnClickListener {
-            if (binding.sourceLanguage.text == getString(R.string.batak_toba)) {
-                Toast.makeText(
-                    applicationContext,
-                    "Maaf, Speech to Text untuk Bahasa Batak Toba belum tersedia",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                val microphone = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                microphone.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                microphone.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "id")
-
-                try {
-                    inputText.setText("")
-                    startActivityForResult(microphone, 100)
-                } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Perangkat Anda tidak mendukung fitur ini",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-
         textToSpeech = TextToSpeech(this) { status ->
             if (status != TextToSpeech.ERROR) {
                 textToSpeech.language = Locale.forLanguageTag("id")
             }
         }
 
-        if (binding.btnSourceVoice.isEnabled) {
-            binding.btnSourceVoice.setOnClickListener {
+        btnSubmit.setOnClickListener(clickListener)
+        btnChange.setOnClickListener(clickListener)
+        btnSourceVoice.setOnClickListener(clickListener)
+        btnTargetVoice.setOnClickListener(clickListener)
+        micFab.setOnClickListener(clickListener)
+    }
+
+    private val clickListener = View.OnClickListener { view ->  
+        when (view.id) {
+            R.id.btn_submit -> {
+                translation.visibility = View.VISIBLE
+                btnChange.visibility = View.VISIBLE
+                translate(inputText.text.toString())
+            }
+            R.id.change_btn -> {
+                val temp: String = inputText.text.toString()
+                inputText.text = outputText.text
+                outputText.setText(temp)
+
+                if (sourceLanguage.text == getString(R.string.indonesia)) {
+                    binding.apply {
+                        sourceLanguage.text = getString(R.string.batak_toba)
+                        targetLanguage.text = getString(R.string.indonesia)
+
+                        btnSourceVoice.isEnabled = false
+                        btnTargetVoice.isEnabled = true
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            btnSourceVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.disabled_button_color))
+                            btnTargetVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.main_purple))
+                            micFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.disabled_button_color))
+                        }
+                    }
+                } else {
+                    binding.apply {
+                        sourceLanguage.text = getString(R.string.indonesia)
+                        targetLanguage.text = getString(R.string.batak_toba)
+
+                        btnSourceVoice.isEnabled = true
+                        btnTargetVoice.isEnabled = false
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            btnSourceVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.main_purple))
+                            btnTargetVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.disabled_button_color))
+                            micFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.main_purple))
+
+                        }
+                    }
+                }
+            }
+            R.id.mic_fab -> {
+                if (binding.sourceLanguage.text == getString(R.string.batak_toba)) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Maaf, Speech to Text untuk Bahasa Batak Toba belum tersedia",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    val microphone = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                    microphone.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                    microphone.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "id")
+
+                    try {
+                        inputText.setText("")
+                        startActivityForResult(microphone, 100)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Perangkat Anda tidak mendukung fitur ini",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+            R.id.btn_source_voice -> {
                 val text = inputText.text
                 textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
             }
+            R.id.btn_target_voice -> {
+                val text = outputText.text
+                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+            }
         }
-
-        binding.btnTargetVoice.setOnClickListener {
-            val text = outputText.text
-            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
-        }
-
-
     }
 
     @Deprecated("Deprecated in Java")

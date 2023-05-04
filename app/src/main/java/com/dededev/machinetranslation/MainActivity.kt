@@ -17,6 +17,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.dededev.machinetranslation.data.ApiConfig
@@ -50,6 +51,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val toolbar: Toolbar = binding.tbMain
+        setSupportActionBar(toolbar)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.bg_purple)
 
         inputText = binding.inputSource
         outputText = binding.outputTarget

@@ -44,7 +44,7 @@
             android:src="@drawable/ic_baseline_check_24"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/source_language"
-            app:layout_constraintEnd_toStartOf="@+id/btn_source_paste"
+            app:layout_constraintEnd_toStartOf="@+id/btn_source_voice"
             app:layout_constraintTop_toTopOf="@+id/source_language"
             tools:ignore="ContentDescription" />
 
@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:background="@color/transparent"
+            android:visibility="invisible"
             android:src="@drawable/ic_baseline_content_paste_24"
             app:tint="@color/main_purple"
             app:layout_constraintBottom_toBottomOf="@+id/source_language"
@@ -141,6 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:background="@color/transparent"
+            android:visibility="invisible"
             android:src="@drawable/ic_baseline_content_copy_24"
             app:layout_constraintBottom_toBottomOf="@+id/target_language"
             app:layout_constraintEnd_toStartOf="@+id/btn_target_voice"
@@ -201,11 +203,25 @@
         android:elevation="8dp"
         android:clickable="true"
         android:focusable="true"
+        app:tint="@color/main_purple"
         app:layout_constraintBottom_toTopOf="@+id/output_target_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_source_layout"
         android:contentDescription="@string/change_language" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mic_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_mic_24"
+        app:layout_anchorGravity="bottom|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/main_purple"
+        app:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/mic" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

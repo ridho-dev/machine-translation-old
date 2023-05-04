@@ -1,21 +1,28 @@
 package com.dededev.machinetranslation
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
+import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.dededev.machinetranslation.data.ApiConfig
 import com.dededev.machinetranslation.data.TranslateResponse
 import com.dededev.machinetranslation.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var textToSpeech: TextToSpeech
     private var translatedText: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +47,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 //                "Not yet implemented"
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
                 if (p0 != null) {
                     if (p0.isNotEmpty()) {
                         btnSubmit.visibility = View.VISIBLE
@@ -50,10 +61,6 @@ class MainActivity : AppCompatActivity() {
                         btnChange.visibility = View.GONE
                     }
                 }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
             }
         }
 
@@ -84,6 +91,58 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.micFab.setOnClickListener {
+            val microphone = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            microphone.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            microphone.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "id")
+
+            try {
+                inputText.setText("")
+                startActivityForResult(microphone, 100)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(
+                    applicationContext,
+                    "Perangkat Anda tidak mendukung fitur ini",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        textToSpeech = TextToSpeech(this) { status ->
+            if (status != TextToSpeech.ERROR) {
+                textToSpeech.language = Locale.forLanguageTag("id")
+            }
+        }
+
+        binding.btnSourceVoice.setOnClickListener {
+            val text = inputText.text
+            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+        }
+
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            100 -> {
+                if (resultCode == RESULT_OK && data != null) {
+                    val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    val spokenText = result?.get(0)
+                    // Set hasil transkripsi suara ke dalam TextView
+
+                    if (spokenText != null) {
+                        binding.apply {
+                            inputSource.setText(spokenText)
+                            changeBtn.visibility = View.VISIBLE
+                            outputTargetLayout.visibility = View.VISIBLE
+                        }
+                        translate(spokenText)
+                    }
+                }
+            }
+        }
     }
 
     private fun translate(inputText: String) {

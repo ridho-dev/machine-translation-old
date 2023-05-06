@@ -10,7 +10,6 @@ import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
@@ -20,15 +19,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.dededev.machinetranslation.data.ApiConfig
-import com.dededev.machinetranslation.data.TranslateResponse
+import androidx.lifecycle.ViewModelProvider
 import com.dededev.machinetranslation.databinding.ActivityMainBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var mainViewModel: MainViewModel
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var textToSpeech: TextToSpeech
@@ -56,6 +53,11 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.bg_red)
+
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        mainViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
 
         inputText = binding.inputSource
         outputText = binding.outputTarget
@@ -110,12 +112,25 @@ class MainActivity : AppCompatActivity() {
         micFab.setOnClickListener(clickListener)
     }
 
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.mainProgressBar.visibility = View.VISIBLE
+            translation.visibility = View.GONE
+            btnChange.visibility = View.GONE
+        } else {
+            binding.mainProgressBar.visibility = View.GONE
+            translation.visibility = View.VISIBLE
+            btnChange.visibility = View.VISIBLE
+        }
+    }
+
     private val clickListener = View.OnClickListener { view ->  
         when (view.id) {
             R.id.btn_submit -> {
-                translation.visibility = View.VISIBLE
-                btnChange.visibility = View.VISIBLE
-                translate(inputText.text.toString())
+                mainViewModel.translate(inputText.text.toString()).observe(this) {
+                    outputText.setText(it.activity)
+                }
+
             }
             R.id.change_btn -> {
                 val temp: String = inputText.text.toString()
@@ -205,35 +220,12 @@ class MainActivity : AppCompatActivity() {
                             changeBtn.visibility = View.VISIBLE
                             outputTargetLayout.visibility = View.VISIBLE
                         }
-                        translate(spokenText)
+                        mainViewModel.translate(spokenText).observe(this) {
+                            outputText.setText(it.activity)
+                        }
                     }
                 }
             }
         }
-    }
-
-    private fun translate(inputText: String) {
-        val outputText = binding.outputTarget
-
-        val client = ApiConfig.getApiService().getApi(0)
-        client.enqueue(object : Callback<TranslateResponse> {
-            override fun onResponse(
-                call: Call<TranslateResponse>,
-                response: Response<TranslateResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        outputText.setText(responseBody.activity)
-                    }
-                } else {
-                    Log.e("onResponse", "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<TranslateResponse>, t: Throwable) {
-                Log.e("onResponse", "onFailure: ${t.message}")
-            }
-        })
     }
 }

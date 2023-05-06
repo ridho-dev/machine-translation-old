@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = binding.tbMain
         setSupportActionBar(toolbar)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.bg_purple)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.bg_red)
 
         inputText = binding.inputSource
         outputText = binding.outputTarget
@@ -131,7 +131,8 @@ class MainActivity : AppCompatActivity() {
                         btnTargetVoice.isEnabled = true
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             btnSourceVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.disabled_button_color))
-                            btnTargetVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.main_purple))
+                            btnTargetVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.main_red))
+                            btnSourceVoice.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.transparent))
                             micFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.disabled_button_color))
                         }
                     }
@@ -143,9 +144,10 @@ class MainActivity : AppCompatActivity() {
                         btnSourceVoice.isEnabled = true
                         btnTargetVoice.isEnabled = false
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            btnSourceVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.main_purple))
+                            btnSourceVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.main_red))
                             btnTargetVoice.imageTintList = ColorStateList.valueOf(getColor(R.color.disabled_button_color))
-                            micFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.main_purple))
+                            btnSourceVoice.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.bg_red))
+                            micFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.main_red))
 
                         }
                     }

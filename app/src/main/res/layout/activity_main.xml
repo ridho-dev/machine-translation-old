@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     >
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_main"
@@ -33,12 +34,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:dividerColor="@color/disabled_button_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tb_main" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,14 +90,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/circle_background"
-                    android:backgroundTint="@color/bg_purple"
+                    android:backgroundTint="@color/bg_red"
                     android:padding="8dp"
                     android:src="@drawable/ic_baseline_check_24"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/source_language"
                     app:layout_constraintEnd_toStartOf="@+id/btn_source_voice"
                     app:layout_constraintTop_toTopOf="@+id/source_language"
-                    app:tint="@color/main_purple"
+                    app:tint="@color/main_red"
                     tools:ignore="ContentDescription" />
 
                 <ImageButton
@@ -108,7 +111,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/source_language"
                     app:layout_constraintEnd_toStartOf="@+id/btn_source_voice"
                     app:layout_constraintTop_toTopOf="@+id/source_language"
-                    app:tint="@color/main_purple"
+                    app:tint="@color/main_red"
                     tools:ignore="ContentDescription" />
 
                 <ImageButton
@@ -116,13 +119,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/circle_background"
-                    android:backgroundTint="@color/bg_purple"
+                    android:backgroundTint="@color/bg_red"
                     android:padding="8dp"
                     android:src="@drawable/ic_baseline_volume_up_24"
                     app:layout_constraintBottom_toBottomOf="@+id/source_language"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/source_language"
-                    app:tint="@color/main_purple"
+                    app:tint="@color/main_red"
                     tools:ignore="ContentDescription" />
 
                 <EditText
@@ -132,6 +135,7 @@
                     android:layout_marginTop="8dp"
                     android:backgroundTint="@color/transparent"
                     android:hint="@string/input_text"
+                    android:textColorHint="@color/disabled_button_color"
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine"
                     android:maxLines="64"
@@ -139,6 +143,7 @@
                     android:singleLine="false"
                     android:textCursorDrawable="@null"
                     android:textSize="32sp"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/source_divider" />
@@ -159,9 +164,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:background="@drawable/rounded_corner"
-                android:backgroundTint="@color/bg_purple"
+                android:backgroundTint="@color/bg_red"
                 android:padding="16dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_source_layout">
@@ -197,7 +202,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/target_language"
                     app:layout_constraintEnd_toStartOf="@+id/btn_target_voice"
                     app:layout_constraintTop_toTopOf="@+id/target_language"
-                    app:tint="@color/main_purple"
+                    app:tint="@color/main_red"
                     tools:ignore="ContentDescription" />
 
                 <ImageButton
@@ -262,7 +267,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_source_layout"
-                app:tint="@color/main_purple" />
+                app:tint="@color/main_red" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
@@ -272,7 +277,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:background="@drawable/circle_background"
-        android:backgroundTint="@color/main_purple"
+        android:backgroundTint="@color/main_red"
         android:contentDescription="@string/mic"
         android:padding="16dp"
         android:src="@drawable/ic_baseline_mic_24"

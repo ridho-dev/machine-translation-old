@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         when (view.id) {
             R.id.btn_submit -> {
                 mainViewModel.translate(inputText.text.toString()).observe(this) {
-                    outputText.setText(it.activity)
+                    outputText.setText(it.output)
                 }
 
             }
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity() {
                             outputTargetLayout.visibility = View.VISIBLE
                         }
                         mainViewModel.translate(spokenText).observe(this) {
-                            outputText.setText(it.activity)
+                            outputText.setText(it.output)
                         }
                     }
                 }

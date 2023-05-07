@@ -20,7 +20,7 @@ class MainViewModel: ViewModel() {
     fun translate(query: String):LiveData<TranslateResponse> {
         _isLoading.value = true
 
-        val client = ApiConfig.getApiService().getApi(0)
+        val client = ApiConfig.getApiService().getApi(query)
         client.enqueue(object : Callback<TranslateResponse> {
             override fun onResponse(
                 call: Call<TranslateResponse>,

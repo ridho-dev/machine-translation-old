@@ -4,8 +4,8 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
-    @GET("api/activity")
+    @GET("translate")
     fun getApi(
-        @Query("price") price: Int
+        @Query("s") s: String
     ): Call<TranslateResponse>
 }

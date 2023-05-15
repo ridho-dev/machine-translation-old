@@ -10,17 +10,19 @@ import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.dededev.machinetranslation.databinding.ActivityMainBinding
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStreamReader
+import java.nio.file.Paths
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnSourceVoice : ImageButton
     private lateinit var btnTargetVoice : ImageButton
     private lateinit var micFab : ImageButton
+    private lateinit var randomSentenceBtn : Button
 
     private lateinit var translation : ConstraintLayout
     private lateinit var inputText : EditText
@@ -42,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sourceLanguage : TextView
     private lateinit var targetLanguage : TextView
 
+    private lateinit var sentenceIndo : List<String>
+    private lateinit var sentenceBatak : List<String>
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +74,9 @@ class MainActivity : AppCompatActivity() {
         btnSourceVoice = binding.btnSourceVoice
         btnTargetVoice = binding.btnTargetVoice
         micFab = binding.micFab
+        randomSentenceBtn = binding.randomSentenceBtn
+        sentenceIndo = createIndoSentences()
+        sentenceBatak = createBatakSentences()
 
         outputText.isEnabled = false
         btnTargetVoice.isEnabled = targetLanguage.text != getString(R.string.batak_toba)
@@ -110,6 +118,7 @@ class MainActivity : AppCompatActivity() {
         btnSourceVoice.setOnClickListener(clickListener)
         btnTargetVoice.setOnClickListener(clickListener)
         micFab.setOnClickListener(clickListener)
+        randomSentenceBtn.setOnClickListener(clickListener)
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -207,8 +216,49 @@ class MainActivity : AppCompatActivity() {
                 val text = outputText.text
                 textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
             }
+            R.id.random_sentence_btn -> {
+                val random = Random().nextInt(sentenceIndo.size)
+                if (sourceLanguage.text == getString(R.string.indonesia)) {
+                    inputText.setText(sentenceIndo[random])
+                } else {
+                    inputText.setText(sentenceBatak[random])
+                }
+            }
         }
     }
+
+    private fun createIndoSentences(): List<String> {
+        val inputStream = resources.openRawResource(R.raw.data_indo_only)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+
+        val sentences = mutableListOf<String>()
+        var line: String? = reader.readLine()
+        while (line != null) {
+            sentences.add(line)
+            line = reader.readLine()
+        }
+        reader.close()
+
+        return sentences
+
+    }
+
+    private fun createBatakSentences(): List<String> {
+        val inputStream = resources.openRawResource(R.raw.data_batak_only)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+
+        val sentences = mutableListOf<String>()
+        var line: String? = reader.readLine()
+        while (line != null) {
+            sentences.add(line)
+            line = reader.readLine()
+        }
+        reader.close()
+
+        return sentences
+
+    }
+
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

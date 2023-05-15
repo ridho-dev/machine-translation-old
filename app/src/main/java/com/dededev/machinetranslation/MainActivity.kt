@@ -127,9 +127,16 @@ class MainActivity : AppCompatActivity() {
     private val clickListener = View.OnClickListener { view ->  
         when (view.id) {
             R.id.btn_submit -> {
-                mainViewModel.translate(inputText.text.toString()).observe(this) {
-                    outputText.setText(it.output)
+                if (sourceLanguage.text == getString(R.string.indonesia)) {
+                    mainViewModel.translateToBatak(inputText.text.toString()).observe(this) {
+                        outputText.setText(it.output)
+                    }
+                } else {
+                    mainViewModel.translateToIndo(inputText.text.toString()).observe(this) {
+                        outputText.setText(it.output)
+                    }
                 }
+
 
             }
             R.id.change_btn -> {
@@ -220,7 +227,7 @@ class MainActivity : AppCompatActivity() {
                             changeBtn.visibility = View.VISIBLE
                             outputTargetLayout.visibility = View.VISIBLE
                         }
-                        mainViewModel.translate(spokenText).observe(this) {
+                        mainViewModel.translateToBatak(spokenText).observe(this) {
                             outputText.setText(it.output)
                         }
                     }
